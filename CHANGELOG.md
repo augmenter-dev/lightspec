@@ -1,5 +1,11 @@
 # lightspec
 
+## 0.3.1
+
+### Patch Changes
+
+- [#6](https://github.com/augmenter-dev/LightSpec/pull/6) [`5bdb8f2`](https://github.com/augmenter-dev/LightSpec/commit/5bdb8f2f85d398754d2a617df88501792dbf0569) Thanks [@viteinfinite](https://github.com/viteinfinite)! - Minor CI updates
+
 ## 0.3.0
 
 ### Minor Changes
