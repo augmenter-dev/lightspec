@@ -19,7 +19,7 @@
         {
           default = pkgs.stdenv.mkDerivation (finalAttrs: {
             pname = "lightspec";
-            version = "0.20.0";
+            version = "0.3.1";
 
             src = ./.;
 
@@ -27,7 +27,7 @@
               inherit (finalAttrs) pname version src;
               pnpm = pkgs.pnpm_9;
               fetcherVersion = 3;
-              hash = "sha256-GIl/Y39eE7cNp7xhrl5ijbRQSId0HCL6OVkvXqa7q/0=";
+              hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
             };
 
             nativeBuildInputs = with pkgs; [
