@@ -1,5 +1,11 @@
 # lightspec
 
+## 0.3.2
+
+### Patch Changes
+
+- [#7](https://github.com/augmenter-dev/LightSpec/pull/7) [`5564059`](https://github.com/augmenter-dev/LightSpec/commit/5564059cf96f396a7747a98067c669428fcf7e5b) Thanks [@viteinfinite](https://github.com/viteinfinite)! - Improve prompt templates
+
 ## 0.3.1
 
 ### Patch Changes
