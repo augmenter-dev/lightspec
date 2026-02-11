@@ -12,7 +12,7 @@ export interface AgentSkillTarget {
 
 export type SkillInstallLocation = 'project' | 'home';
 
-const ALL_SKILL_IDS: AgentSkillId[] = ['proposal', 'apply', 'archive', 'context-check'];
+const ALL_SKILL_IDS: AgentSkillId[] = ['proposal', 'apply', 'archive', 'agentsmd-check'];
 
 const TOOL_SKILL_ROOTS: Record<string, string> = {
   'amazon-q': '.amazonq',

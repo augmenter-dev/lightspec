@@ -1,24 +1,24 @@
-export type AgentSkillId = 'proposal' | 'apply' | 'archive' | 'context-check';
+export type AgentSkillId = 'proposal' | 'apply' | 'archive' | 'agentsmd-check';
 import { applyTemplate, applyFrontmatter } from './apply-template.js';
 import { archiveTemplate, archiveFrontmatter } from './archive-template.js';
 import { proposalTemplate, proposalFrontmatter } from './proposal-template.js';
 import {
-  contextCheckTemplate,
-  contextCheckFrontmatter,
-} from './context-check-template.js';
+  agentsmdCheckTemplate,
+  agentsmdCheckFrontmatter,
+} from './agentsmd-check-template.js';
 
 export const agentSkillBodies: Record<AgentSkillId, string> = {
   proposal: proposalTemplate,
   apply: applyTemplate,
   archive: archiveTemplate,
-  'context-check': contextCheckTemplate,
+  'agentsmd-check': agentsmdCheckTemplate,
 };
 
 export const agentSkillFrontmatter: Record<AgentSkillId, string> = {
   proposal: proposalFrontmatter,
   apply: applyFrontmatter,
   archive: archiveFrontmatter,
-  'context-check': contextCheckFrontmatter,
+  'agentsmd-check': agentsmdCheckFrontmatter,
 };
 
 export function getAgentSkillBody(id: AgentSkillId): string {

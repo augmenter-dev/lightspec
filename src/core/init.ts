@@ -931,7 +931,7 @@ export class InitCommand {
     console.log(PALETTE.white('1. Validate and populate your project context:'));
     console.log(
       PALETTE.lightGray(
-        '   "/lightspec:context-check"\n'
+        '   "/lightspec:agentsmd-check"\n'
       )
     );
     console.log(PALETTE.white('2. Create your first change proposal:'));

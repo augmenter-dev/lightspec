@@ -186,10 +186,10 @@ After `lightspec init` completes, you'll receive a suggested command to validate
 
 ```text
 Validate and populate your project context:
-"/lightspec:context-check"
+"/lightspec:agentsmd-check"
 ```
 
-Use the `/lightspec:context-check` skill to validate that your agent instruction file (CLAUDE.md or AGENTS.md) contains adequate project context. The skill will check for required properties like Purpose, Tech Stack, Architecture Patterns, and more. If anything is missing, it can help you explore the codebase and populate the missing information.
+Use the `/lightspec:agentsmd-check` skill to validate that your agent instruction file (CLAUDE.md or AGENTS.md) contains adequate project context. The skill will check for required properties like Purpose, Tech Stack, Architecture Patterns, and more. If anything is missing, it can help you explore the codebase and populate the missing information.
 
 ### Create Your First Change
 
@@ -399,10 +399,12 @@ See [MAINTAINERS.md](MAINTAINERS.md) for the list of core maintainers and adviso
 
 ## Agent Skills
 
-LightSpec includes 3 Claude Code skills for the core development workflow:
-- `lightspec-proposal` - Create a new change
-- `lightspec-apply` - Get apply instructions for implementation
-- `lightspec-archive` - Archive a completed change
+LightSpec includes 4 Claude Code skills for the core development workflow:
+
+- `lightspec:agentsmd-check` - Check the completeness of AGENTS.md or CLAUDE.md
+- `lightspec:proposal` - Create a new change
+- `lightspec:apply` - Get apply instructions for implementation
+- `lightspec:archive` - Archive a completed change
 
 See [README_SKILLS.md](README_SKILLS.md) for details.
 

@@ -1,14 +1,14 @@
-export const contextCheckFrontmatter = `---
-name: lightspec-context-check
+export const agentsmdCheckFrontmatter = `---
+name: lightspec-agentsmd-check
 description: Validate project context in agent instruction files and help populate missing information.
 disable-model-invocation: true
 user-invocable: true
 metadata:
   source: lightspec
-  workflow: context-check
+  workflow: agentsmd-check
 ---`;
 
-export const contextCheckTemplate = `**Goal**
+export const agentsmdCheckTemplate = `**Goal**
 Validate that the project's agent instruction file (CLAUDE.md or AGENTS.md at project root) contains adequate context for AI assistants to work effectively with this codebase.
 
 **Detection Strategy**
@@ -126,4 +126,3 @@ Would you like me to explore your codebase to gather this context and propose up
 - Prefer concise bullet points instead of extensive prose
 - Keep the final document under 300 lines to ensure it remains concise and focused on essential context for AI assistants
 - After writing, summarize what was updated and confirm completion`;
-
