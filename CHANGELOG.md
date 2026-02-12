@@ -1,5 +1,11 @@
 # lightspec
 
+## 0.4.0
+
+### Minor Changes
+
+- [`adf8146`](https://github.com/augmenter-dev/LightSpec/commit/adf8146536a2a5df1fc0c2fb2233f3173e8edee4) Thanks [@viteinfinite](https://github.com/viteinfinite)! - Rename context-check to agentsmd-check
+
 ## 0.3.3
 
 ### Patch Changes
