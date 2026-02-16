@@ -1,5 +1,13 @@
 # lightspec
 
+## 0.4.1
+
+### Patch Changes
+
+- ### New Features
+
+  - Added `.agents` provider support so LightSpec can install and refresh shared skills in `.agents/skills/*`, alongside existing root `AGENTS.md` handling.
+
 ## 0.4.0
 
 ### Minor Changes

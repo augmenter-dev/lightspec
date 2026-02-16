@@ -17,6 +17,7 @@ const ALL_SKILL_IDS: AgentSkillId[] = ['proposal', 'apply', 'archive', 'agentsmd
 const TOOL_SKILL_ROOTS: Record<string, string> = {
   'amazon-q': '.amazonq',
   antigravity: '.antigravity',
+  agents: '.agents',
   auggie: '.auggie',
   claude: '.claude',
   cline: '.cline',

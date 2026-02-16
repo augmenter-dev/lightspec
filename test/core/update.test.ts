@@ -226,6 +226,40 @@ Old content
     await expect(FileSystemUtils.fileExists(archivePath)).resolves.toBe(false);
   });
 
+  it('should refresh existing .agents skill files', async () => {
+    const proposalPath = path.join(
+      testDir,
+      '.agents/skills/lightspec-proposal/SKILL.md'
+    );
+    await fs.mkdir(path.dirname(proposalPath), { recursive: true });
+    await fs.writeFile(
+      proposalPath,
+      `---
+name: LightSpec: Proposal
+description: Old description
+---
+<!-- LIGHTSPEC:START -->
+Old .agents content
+<!-- LIGHTSPEC:END -->`
+    );
+
+    const consoleSpy = vi.spyOn(console, 'log');
+
+    await updateCommand.execute(testDir);
+
+    const updated = await fs.readFile(proposalPath, 'utf-8');
+    expect(updated).toContain('name: LightSpec: Proposal');
+    expect(updated).toContain('**Guardrails**');
+    expect(updated).not.toContain('Old .agents content');
+
+    const [logMessage] = consoleSpy.mock.calls[0];
+    expect(logMessage).toContain(
+      'Updated skills: .agents/skills/lightspec-proposal/SKILL.md'
+    );
+
+    consoleSpy.mockRestore();
+  });
+
   it('should not create CLAUDE.md if it does not exist', async () => {
     // Ensure CLAUDE.md does not exist
     const claudePath = path.join(testDir, 'CLAUDE.md');

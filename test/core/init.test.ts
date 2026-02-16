@@ -146,6 +146,34 @@ describe('InitCommand', () => {
       expect(updatedContent).toContain('Custom instructions here');
     });
 
+    it('should create .agents skill files when agents is selected', async () => {
+      queueSelections('agents', DONE);
+
+      await initCommand.execute(testDir);
+
+      const proposalPath = path.join(
+        testDir,
+        '.agents/skills/lightspec-proposal/SKILL.md'
+      );
+      const applyPath = path.join(
+        testDir,
+        '.agents/skills/lightspec-apply/SKILL.md'
+      );
+      const archivePath = path.join(
+        testDir,
+        '.agents/skills/lightspec-archive/SKILL.md'
+      );
+
+      expect(await fileExists(proposalPath)).toBe(true);
+      expect(await fileExists(applyPath)).toBe(true);
+      expect(await fileExists(archivePath)).toBe(true);
+
+      const proposalContent = await fs.readFile(proposalPath, 'utf-8');
+      expect(proposalContent).toContain('name: lightspec-proposal');
+      expect(proposalContent).toContain('<!-- LIGHTSPEC:START -->');
+      expect(proposalContent).toContain('**Guardrails**');
+    });
+
     it('should create CLINE.md when Cline is selected', async () => {
       queueSelections('cline', DONE);
 
