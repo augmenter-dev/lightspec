@@ -2,6 +2,7 @@ import {
   AGENT_SKILL_TOOL_IDS,
   AgentSkillConfigurator,
   SkillInstallLocation,
+  normalizeAgentSkillToolId,
 } from './base.js';
 
 export class AgentSkillRegistry {
@@ -18,7 +19,7 @@ export class AgentSkillRegistry {
   }
 
   static get(toolId: string): AgentSkillConfigurator | undefined {
-    return this.configurators.get(toolId);
+    return this.configurators.get(normalizeAgentSkillToolId(toolId));
   }
 
   static getAll(): AgentSkillConfigurator[] {

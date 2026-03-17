@@ -23,6 +23,7 @@ import {
   LIGHTSPEC_DIR_NAME,
   AIToolOption,
   LIGHTSPEC_MARKERS,
+  normalizeToolId,
 } from './config.js';
 import { PALETTE } from './styles/palette.js';
 import { SkillInstallLocation } from './configurators/skills/base.js';
@@ -528,11 +529,13 @@ export class InitCommand {
   ): Promise<string[]> {
     const nonInteractiveSelection = this.resolveToolsArg();
     if (nonInteractiveSelection !== null) {
-      return nonInteractiveSelection;
+      return this.normalizeSelectedTools(nonInteractiveSelection);
     }
 
     // Fall back to interactive mode
-    return this.promptForAITools(existingTools, extendMode);
+    return this.normalizeSelectedTools(
+      await this.promptForAITools(existingTools, extendMode)
+    );
   }
 
   private resolveToolsArg(): string[] | null {
@@ -572,7 +575,7 @@ export class InitCommand {
       );
     }
 
-    const normalizedTokens = tokens.map((token) => token.toLowerCase());
+    const normalizedTokens = tokens.map((token) => normalizeToolId(token));
 
     if (normalizedTokens.some((token) => token === 'all' || token === 'none')) {
       throw new Error('Cannot combine reserved values "all" or "none" with specific tool IDs.');
@@ -596,6 +599,23 @@ export class InitCommand {
     }
 
     return deduped;
+  }
+
+  private normalizeSelectedTools(selected: string[]): string[] {
+    const availableSet = new Set(
+      AI_TOOLS.filter((tool) => tool.available).map((tool) => tool.value)
+    );
+    const normalized: string[] = [];
+
+    for (const toolId of selected) {
+      const canonical = normalizeToolId(toolId);
+      if (!availableSet.has(canonical) || normalized.includes(canonical)) {
+        continue;
+      }
+      normalized.push(canonical);
+    }
+
+    return normalized;
   }
 
   private async promptForAITools(
@@ -719,10 +739,19 @@ export class InitCommand {
     const skillConfigurator = AgentSkillRegistry.get(toolId);
     if (skillConfigurator) {
       for (const target of skillConfigurator.getTargets()) {
-        const absolute = skillConfigurator.resolveAbsolutePath(projectPath, target.id);
-        if ((await FileSystemUtils.fileExists(absolute)) && (await fileHasMarkers(absolute))) {
-          hasSkills = true;
-          break; // At least one file with markers is sufficient
+        const candidates = skillConfigurator.resolveExistingAbsolutePaths(
+          projectPath,
+          target.id
+        );
+        for (const candidate of candidates) {
+          if ((await FileSystemUtils.fileExists(candidate.absolutePath)) && (await fileHasMarkers(candidate.absolutePath))) {
+            hasSkills = true;
+            break; // At least one file with markers is sufficient
+          }
+        }
+
+        if (hasSkills) {
+          break;
         }
       }
     }
@@ -831,7 +860,7 @@ export class InitCommand {
     projectPath: string,
     lightspecDir: string
   ): Promise<RootStubStatus> {
-    const configurator = ToolRegistry.get('agents');
+    const configurator = ToolRegistry.get('universal');
     if (!configurator || !configurator.isAvailable) {
       return 'skipped';
     }

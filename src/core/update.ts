@@ -107,7 +107,9 @@ export class UpdateCommand {
 
     if (updatedSkillFiles.length > 0) {
       // Normalize to forward slashes for cross-platform log consistency
-      const normalized = updatedSkillFiles.map((p) => FileSystemUtils.toPosixPath(p));
+      const normalized = Array.from(
+        new Set(updatedSkillFiles.map((p) => FileSystemUtils.toPosixPath(p)))
+      );
       summaryParts.push(`Updated skills: ${normalized.join(', ')}`);
     }
 

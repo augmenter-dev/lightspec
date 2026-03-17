@@ -94,7 +94,7 @@ describe('lightspec CLI e2e basics', () => {
 
       // Check that tool configurations were created
       const claudePath = path.join(emptyProjectDir, 'CLAUDE.md');
-      const cursorProposal = path.join(emptyProjectDir, '.cursor/skills/lightspec-proposal/SKILL.md');
+      const cursorProposal = path.join(emptyProjectDir, '.agents/skills/lightspec-proposal/SKILL.md');
       expect(await fileExists(claudePath)).toBe(true);
       expect(await fileExists(cursorProposal)).toBe(true);
     });
@@ -104,12 +104,12 @@ describe('lightspec CLI e2e basics', () => {
       const emptyProjectDir = path.join(projectDir, '..', 'empty-project');
       await fs.mkdir(emptyProjectDir, { recursive: true });
 
-      const result = await runCLI(['init', '--tools', 'claude'], { cwd: emptyProjectDir });
+      const result = await runCLI(['init', '--tools', 'claude-code'], { cwd: emptyProjectDir });
       expect(result.exitCode).toBe(0);
       expect(result.stdout).toContain('Tool summary:');
 
       const claudePath = path.join(emptyProjectDir, 'CLAUDE.md');
-      const cursorProposal = path.join(emptyProjectDir, '.cursor/skills/lightspec-proposal/SKILL.md');
+      const cursorProposal = path.join(emptyProjectDir, '.agents/skills/lightspec-proposal/SKILL.md');
       expect(await fileExists(claudePath)).toBe(true);
       expect(await fileExists(cursorProposal)).toBe(false); // Not selected
     });
@@ -124,7 +124,7 @@ describe('lightspec CLI e2e basics', () => {
       expect(result.stdout).toContain('Tool summary:');
 
       const claudePath = path.join(emptyProjectDir, 'CLAUDE.md');
-      const cursorProposal = path.join(emptyProjectDir, '.cursor/skills/lightspec-proposal/SKILL.md');
+      const cursorProposal = path.join(emptyProjectDir, '.agents/skills/lightspec-proposal/SKILL.md');
       const rootAgentsPath = path.join(emptyProjectDir, 'AGENTS.md');
 
       expect(await fileExists(rootAgentsPath)).toBe(true);
@@ -148,7 +148,7 @@ describe('lightspec CLI e2e basics', () => {
       const emptyProjectDir = path.join(projectDir, '..', 'empty-project');
       await fs.mkdir(emptyProjectDir, { recursive: true });
 
-      const result = await runCLI(['init', '--tools', 'all,claude'], { cwd: emptyProjectDir });
+      const result = await runCLI(['init', '--tools', 'all,claude-code'], { cwd: emptyProjectDir });
       expect(result.exitCode).toBe(1);
       expect(result.stderr).toContain('Cannot combine reserved values "all" or "none" with specific tool IDs');
     });
@@ -174,7 +174,7 @@ describe('lightspec CLI e2e basics', () => {
       );
       const projectSkill = path.join(
         emptyProjectDir,
-        '.codex/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
 
       expect(await fileExists(globalSkill)).toBe(true);

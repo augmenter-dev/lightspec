@@ -147,7 +147,7 @@ describe('InitCommand', () => {
     });
 
     it('should create .agents skill files when agents is selected', async () => {
-      queueSelections('agents', DONE);
+      queueSelections('universal', DONE);
 
       await initCommand.execute(testDir);
 
@@ -258,15 +258,15 @@ describe('InitCommand', () => {
 
       const agProposal = path.join(
         testDir,
-        '.antigravity/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
       const agApply = path.join(
         testDir,
-        '.antigravity/skills/lightspec-apply/SKILL.md'
+        '.agents/skills/lightspec-apply/SKILL.md'
       );
       const agArchive = path.join(
         testDir,
-        '.antigravity/skills/lightspec-archive/SKILL.md'
+        '.agents/skills/lightspec-archive/SKILL.md'
       );
 
       expect(await fileExists(agProposal)).toBe(true);
@@ -380,15 +380,15 @@ describe('InitCommand', () => {
 
       const cursorProposal = path.join(
         testDir,
-        '.cursor/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
       const cursorApply = path.join(
         testDir,
-        '.cursor/skills/lightspec-apply/SKILL.md'
+        '.agents/skills/lightspec-apply/SKILL.md'
       );
       const cursorArchive = path.join(
         testDir,
-        '.cursor/skills/lightspec-archive/SKILL.md'
+        '.agents/skills/lightspec-archive/SKILL.md'
       );
 
       expect(await fileExists(cursorProposal)).toBe(true);
@@ -415,15 +415,15 @@ describe('InitCommand', () => {
 
       const geminiProposal = path.join(
         testDir,
-        '.gemini/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
       const geminiApply = path.join(
         testDir,
-        '.gemini/skills/lightspec-apply/SKILL.md'
+        '.agents/skills/lightspec-apply/SKILL.md'
       );
       const geminiArchive = path.join(
         testDir,
-        '.gemini/skills/lightspec-archive/SKILL.md'
+        '.agents/skills/lightspec-archive/SKILL.md'
       );
 
       expect(await fileExists(geminiProposal)).toBe(true);
@@ -455,7 +455,7 @@ describe('InitCommand', () => {
 
       const geminiProposal = path.join(
         testDir,
-        '.gemini/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
 
       // Modify the file to simulate user customization
@@ -537,15 +537,15 @@ describe('InitCommand', () => {
 
       const openCodeProposal = path.join(
         testDir,
-        '.opencode/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
       const openCodeApply = path.join(
         testDir,
-        '.opencode/skills/lightspec-apply/SKILL.md'
+        '.agents/skills/lightspec-apply/SKILL.md'
       );
       const openCodeArchive = path.join(
         testDir,
-        '.opencode/skills/lightspec-archive/SKILL.md'
+        '.agents/skills/lightspec-archive/SKILL.md'
       );
 
       expect(await fileExists(openCodeProposal)).toBe(true);
@@ -643,15 +643,15 @@ describe('InitCommand', () => {
 
       const clineProposal = path.join(
         testDir,
-        '.cline/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
       const clineApply = path.join(
         testDir,
-        '.cline/skills/lightspec-apply/SKILL.md'
+        '.agents/skills/lightspec-apply/SKILL.md'
       );
       const clineArchive = path.join(
         testDir,
-        '.cline/skills/lightspec-archive/SKILL.md'
+        '.agents/skills/lightspec-archive/SKILL.md'
       );
 
       expect(await fileExists(clineProposal)).toBe(true);
@@ -720,15 +720,15 @@ describe('InitCommand', () => {
 
       const proposalPath = path.join(
         testDir,
-        '.codex/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
       const applyPath = path.join(
         testDir,
-        '.codex/skills/lightspec-apply/SKILL.md'
+        '.agents/skills/lightspec-apply/SKILL.md'
       );
       const archivePath = path.join(
         testDir,
-        '.codex/skills/lightspec-archive/SKILL.md'
+        '.agents/skills/lightspec-archive/SKILL.md'
       );
 
       expect(await fileExists(proposalPath)).toBe(true);
@@ -834,15 +834,15 @@ describe('InitCommand', () => {
 
       const proposalPath = path.join(
         testDir,
-        '.github/copilot/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
       const applyPath = path.join(
         testDir,
-        '.github/copilot/skills/lightspec-apply/SKILL.md'
+        '.agents/skills/lightspec-apply/SKILL.md'
       );
       const archivePath = path.join(
         testDir,
-        '.github/copilot/skills/lightspec-archive/SKILL.md'
+        '.agents/skills/lightspec-archive/SKILL.md'
       );
 
       expect(await fileExists(proposalPath)).toBe(true);
@@ -876,7 +876,7 @@ describe('InitCommand', () => {
 
       const cursorProposal = path.join(
         testDir,
-        '.cursor/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
       expect(await fileExists(cursorProposal)).toBe(true);
     });
@@ -992,6 +992,23 @@ describe('InitCommand', () => {
       expect(await fileExists(claudePath)).toBe(true);
     });
 
+    it('should show a single .agents option with first five providers and ellipsis', async () => {
+      queueSelections('universal', DONE);
+
+      await initCommand.execute(testDir);
+
+      const firstCallArgs = mockPrompt.mock.calls[0][0];
+      const agentsChoice = firstCallArgs.choices.find(
+        (choice: any) => choice.value === 'universal'
+      );
+
+      expect(agentsChoice).toBeDefined();
+      expect(agentsChoice.label.primary).toBe('AGENTS.md + .agents');
+      expect(agentsChoice.label.annotation).toBe(
+        'Amp, VS Code, Zed, Warp, Aider, ...'
+      );
+    });
+
     it('should mark existing tools as already configured during extend mode', async () => {
       queueSelections('claude', DONE, 'cursor', DONE);
       await initCommand.execute(testDir);
@@ -999,7 +1016,7 @@ describe('InitCommand', () => {
 
       const secondRunArgs = mockPrompt.mock.calls[1][0];
       const claudeChoice = secondRunArgs.choices.find(
-        (choice: any) => choice.value === 'claude'
+        (choice: any) => choice.value === 'claude-code'
       );
       expect(claudeChoice.configured).toBe(true);
     });
@@ -1011,7 +1028,7 @@ describe('InitCommand', () => {
 
       const secondRunArgs = mockPrompt.mock.calls[1][0];
       const qwenChoice = secondRunArgs.choices.find(
-        (choice: any) => choice.value === 'qwen'
+        (choice: any) => choice.value === 'qwen-code'
       );
       expect(qwenChoice.configured).toBe(true);
     });
@@ -1023,7 +1040,7 @@ describe('InitCommand', () => {
 
       const secondRunArgs = mockPrompt.mock.calls[1][0];
       const preselected = secondRunArgs.initialSelected ?? [];
-      expect(preselected).toContain('kilocode');
+      expect(preselected).toContain('kilo');
     });
 
     it('should mark Windsurf as already configured during extend mode', async () => {
@@ -1081,7 +1098,7 @@ describe('InitCommand', () => {
 
       const secondRunArgs = mockPrompt.mock.calls[1][0];
       const factoryChoice = secondRunArgs.choices.find(
-        (choice: any) => choice.value === 'factory'
+        (choice: any) => choice.value === 'droid'
       );
       expect(factoryChoice.configured).toBe(true);
     });
@@ -1153,15 +1170,15 @@ describe('InitCommand', () => {
 
       const auggieProposal = path.join(
         testDir,
-        '.auggie/skills/lightspec-proposal/SKILL.md'
+        '.augment/skills/lightspec-proposal/SKILL.md'
       );
       const auggieApply = path.join(
         testDir,
-        '.auggie/skills/lightspec-apply/SKILL.md'
+        '.augment/skills/lightspec-apply/SKILL.md'
       );
       const auggieArchive = path.join(
         testDir,
-        '.auggie/skills/lightspec-archive/SKILL.md'
+        '.augment/skills/lightspec-archive/SKILL.md'
       );
 
       expect(await fileExists(auggieProposal)).toBe(true);
@@ -1195,7 +1212,7 @@ describe('InitCommand', () => {
 
       const secondRunArgs = mockPrompt.mock.calls[1][0];
       const auggieChoice = secondRunArgs.choices.find(
-        (choice: any) => choice.value === 'auggie'
+        (choice: any) => choice.value === 'augment'
       );
       expect(auggieChoice.configured).toBe(true);
     });
@@ -1454,15 +1471,15 @@ describe('InitCommand', () => {
 
       const rooProposal = path.join(
         testDir,
-        '.roocode/skills/lightspec-proposal/SKILL.md'
+        '.roo/skills/lightspec-proposal/SKILL.md'
       );
       const rooApply = path.join(
         testDir,
-        '.roocode/skills/lightspec-apply/SKILL.md'
+        '.roo/skills/lightspec-apply/SKILL.md'
       );
       const rooArchive = path.join(
         testDir,
-        '.roocode/skills/lightspec-archive/SKILL.md'
+        '.roo/skills/lightspec-archive/SKILL.md'
       );
 
       expect(await fileExists(rooProposal)).toBe(true);
@@ -1489,7 +1506,7 @@ describe('InitCommand', () => {
 
       const secondRunArgs = mockPrompt.mock.calls[1][0];
       const rooChoice = secondRunArgs.choices.find(
-        (choice: any) => choice.value === 'roocode'
+        (choice: any) => choice.value === 'roo'
       );
       expect(rooChoice.configured).toBe(true);
     });
@@ -1622,7 +1639,7 @@ describe('InitCommand', () => {
       const claudePath = path.join(testDir, 'CLAUDE.md');
       const cursorProposal = path.join(
         testDir,
-        '.cursor/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
       const windsurfProposal = path.join(
         testDir,
@@ -1635,14 +1652,14 @@ describe('InitCommand', () => {
     });
 
     it('should select specific tools with --tools option', async () => {
-      const nonInteractiveCommand = new InitCommand({ tools: 'claude,cursor' });
+      const nonInteractiveCommand = new InitCommand({ tools: 'claude-code,cursor' });
 
       await nonInteractiveCommand.execute(testDir);
 
       const claudePath = path.join(testDir, 'CLAUDE.md');
       const cursorProposal = path.join(
         testDir,
-        '.cursor/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
       const windsurfProposal = path.join(
         testDir,
@@ -1662,7 +1679,7 @@ describe('InitCommand', () => {
       const claudePath = path.join(testDir, 'CLAUDE.md');
       const cursorProposal = path.join(
         testDir,
-        '.cursor/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
 
       // Should still create AGENTS.md but no tool-specific files
@@ -1681,14 +1698,14 @@ describe('InitCommand', () => {
     });
 
     it('should handle comma-separated tool names with spaces', async () => {
-      const nonInteractiveCommand = new InitCommand({ tools: 'claude, cursor' });
+      const nonInteractiveCommand = new InitCommand({ tools: 'claude-code, cursor' });
 
       await nonInteractiveCommand.execute(testDir);
 
       const claudePath = path.join(testDir, 'CLAUDE.md');
       const cursorProposal = path.join(
         testDir,
-        '.cursor/skills/lightspec-proposal/SKILL.md'
+        '.agents/skills/lightspec-proposal/SKILL.md'
       );
 
       expect(await fileExists(claudePath)).toBe(true);
@@ -1696,7 +1713,7 @@ describe('InitCommand', () => {
     });
 
     it('should reject combining reserved keywords with explicit tool ids', async () => {
-      const nonInteractiveCommand = new InitCommand({ tools: 'all,claude' });
+      const nonInteractiveCommand = new InitCommand({ tools: 'all,claude-code' });
 
       await expect(nonInteractiveCommand.execute(testDir)).rejects.toThrow(
         /Cannot combine reserved values "all" or "none" with specific tool IDs/
@@ -1718,7 +1735,7 @@ describe('InitCommand', () => {
       // the prompt is called with configured: false for claude
       const firstCallArgs = mockPrompt.mock.calls[0][0];
       const claudeChoice = firstCallArgs.choices.find(
-        (choice: any) => choice.value === 'claude'
+        (choice: any) => choice.value === 'claude-code'
       );
 
       expect(claudeChoice.configured).toBe(false);
@@ -1739,7 +1756,7 @@ describe('InitCommand', () => {
 
       const firstCallArgs = mockPrompt.mock.calls[0][0];
       const claudeChoice = firstCallArgs.choices.find(
-        (choice: any) => choice.value === 'claude'
+        (choice: any) => choice.value === 'claude-code'
       );
 
       expect(claudeChoice.configured).toBe(false);
@@ -1756,7 +1773,7 @@ describe('InitCommand', () => {
 
       const secondCallArgs = mockPrompt.mock.calls[1][0];
       const claudeChoice = secondCallArgs.choices.find(
-        (choice: any) => choice.value === 'claude'
+        (choice: any) => choice.value === 'claude-code'
       );
 
       expect(claudeChoice.configured).toBe(true);

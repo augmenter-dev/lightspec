@@ -1,8 +1,7 @@
 import os from 'os';
-import path from 'path';
 import { FileSystemUtils } from '../../../utils/file-system.js';
 import { TemplateManager, AgentSkillId } from '../../templates/index.js';
-import { LIGHTSPEC_MARKERS } from '../../config.js';
+import { LIGHTSPEC_MARKERS, normalizeToolId } from '../../config.js';
 
 export interface AgentSkillTarget {
   id: AgentSkillId;
@@ -12,40 +11,249 @@ export interface AgentSkillTarget {
 
 export type SkillInstallLocation = 'project' | 'home';
 
+type HomeBase = 'home' | 'codex-home';
+
+interface AgentSkillDescriptor {
+  projectSkillDir: string;
+  homeSkillDir: string;
+  homeBase?: HomeBase;
+  aliases?: string[];
+  legacyProjectSkillDirs?: string[];
+  legacyHomeSkillDirs?: string[];
+}
+
 const ALL_SKILL_IDS: AgentSkillId[] = ['proposal', 'apply', 'archive', 'agentsmd-check'];
 
-const TOOL_SKILL_ROOTS: Record<string, string> = {
-  'amazon-q': '.amazonq',
-  antigravity: '.antigravity',
-  agents: '.agents',
-  auggie: '.auggie',
-  claude: '.claude',
-  cline: '.cline',
-  codex: '.codex',
-  codebuddy: '.codebuddy',
-  continue: '.continue',
-  costrict: '.cospec/lightspec',
-  crush: '.crush',
-  cursor: '.cursor',
-  factory: '.factory',
-  gemini: '.gemini',
-  'github-copilot': '.github/copilot',
-  iflow: '.iflow',
-  kilocode: '.kilocode',
-  'mistral-vibe': '.vibe',
-  opencode: '.opencode',
-  qoder: '.qoder',
-  qwen: '.qwen',
-  roocode: '.roocode',
-  windsurf: '.windsurf',
+const TOOL_SKILL_DESCRIPTORS: Record<string, AgentSkillDescriptor> = {
+  'amazon-q': {
+    projectSkillDir: '.amazonq/skills',
+    homeSkillDir: '.amazonq/skills',
+  },
+  adal: {
+    projectSkillDir: '.adal/skills',
+    homeSkillDir: '.adal/skills',
+  },
+  amp: {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.config/agents/skills',
+  },
+  antigravity: {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.gemini/antigravity/skills',
+    legacyProjectSkillDirs: ['.antigravity/skills'],
+    legacyHomeSkillDirs: ['.antigravity/skills'],
+  },
+  augment: {
+    projectSkillDir: '.augment/skills',
+    homeSkillDir: '.augment/skills',
+    aliases: ['auggie'],
+    legacyProjectSkillDirs: ['.auggie/skills'],
+    legacyHomeSkillDirs: ['.auggie/skills'],
+  },
+  'claude-code': {
+    projectSkillDir: '.claude/skills',
+    homeSkillDir: '.claude/skills',
+    aliases: ['claude'],
+  },
+  cline: {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.agents/skills',
+    legacyProjectSkillDirs: ['.cline/skills'],
+    legacyHomeSkillDirs: ['.cline/skills'],
+  },
+  codebuddy: {
+    projectSkillDir: '.codebuddy/skills',
+    homeSkillDir: '.codebuddy/skills',
+  },
+  'command-code': {
+    projectSkillDir: '.commandcode/skills',
+    homeSkillDir: '.commandcode/skills',
+  },
+  continue: {
+    projectSkillDir: '.continue/skills',
+    homeSkillDir: '.continue/skills',
+  },
+  costrict: {
+    projectSkillDir: '.cospec/lightspec/skills',
+    homeSkillDir: '.cospec/lightspec/skills',
+  },
+  cortex: {
+    projectSkillDir: '.cortex/skills',
+    homeSkillDir: '.snowflake/cortex/skills',
+  },
+  crush: {
+    projectSkillDir: '.crush/skills',
+    homeSkillDir: '.config/crush/skills',
+    legacyHomeSkillDirs: ['.crush/skills'],
+  },
+  cursor: {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.cursor/skills',
+    legacyProjectSkillDirs: ['.cursor/skills'],
+  },
+  codex: {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: 'skills',
+    homeBase: 'codex-home',
+    legacyProjectSkillDirs: ['.codex/skills'],
+  },
+  deepagents: {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.deepagents/agent/skills',
+  },
+  droid: {
+    projectSkillDir: '.factory/skills',
+    homeSkillDir: '.factory/skills',
+    aliases: ['factory'],
+  },
+  'gemini-cli': {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.gemini/skills',
+    aliases: ['gemini'],
+    legacyProjectSkillDirs: ['.gemini/skills'],
+  },
+  'github-copilot': {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.copilot/skills',
+    legacyProjectSkillDirs: ['.github/copilot/skills'],
+    legacyHomeSkillDirs: ['.github/copilot/skills'],
+  },
+  goose: {
+    projectSkillDir: '.goose/skills',
+    homeSkillDir: '.config/goose/skills',
+  },
+  'iflow-cli': {
+    projectSkillDir: '.iflow/skills',
+    homeSkillDir: '.iflow/skills',
+    aliases: ['iflow'],
+  },
+  junie: {
+    projectSkillDir: '.junie/skills',
+    homeSkillDir: '.junie/skills',
+  },
+  kilo: {
+    projectSkillDir: '.kilocode/skills',
+    homeSkillDir: '.kilocode/skills',
+    aliases: ['kilocode'],
+  },
+  'kimi-cli': {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.config/agents/skills',
+  },
+  'kiro-cli': {
+    projectSkillDir: '.kiro/skills',
+    homeSkillDir: '.kiro/skills',
+  },
+  kode: {
+    projectSkillDir: '.kode/skills',
+    homeSkillDir: '.kode/skills',
+  },
+  mcpjam: {
+    projectSkillDir: '.mcpjam/skills',
+    homeSkillDir: '.mcpjam/skills',
+  },
+  'mistral-vibe': {
+    projectSkillDir: '.vibe/skills',
+    homeSkillDir: '.vibe/skills',
+  },
+  mux: {
+    projectSkillDir: '.mux/skills',
+    homeSkillDir: '.mux/skills',
+  },
+  neovate: {
+    projectSkillDir: '.neovate/skills',
+    homeSkillDir: '.neovate/skills',
+  },
+  openclaw: {
+    projectSkillDir: 'skills',
+    homeSkillDir: '.openclaw/skills',
+  },
+  opencode: {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.config/opencode/skills',
+    legacyProjectSkillDirs: ['.opencode/skills'],
+    legacyHomeSkillDirs: ['.opencode/skills'],
+  },
+  openhands: {
+    projectSkillDir: '.openhands/skills',
+    homeSkillDir: '.openhands/skills',
+  },
+  pochi: {
+    projectSkillDir: '.pochi/skills',
+    homeSkillDir: '.pochi/skills',
+  },
+  pi: {
+    projectSkillDir: '.pi/skills',
+    homeSkillDir: '.pi/agent/skills',
+  },
+  qoder: {
+    projectSkillDir: '.qoder/skills',
+    homeSkillDir: '.qoder/skills',
+  },
+  'qwen-code': {
+    projectSkillDir: '.qwen/skills',
+    homeSkillDir: '.qwen/skills',
+    aliases: ['qwen'],
+  },
+  replit: {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.config/agents/skills',
+  },
+  roo: {
+    projectSkillDir: '.roo/skills',
+    homeSkillDir: '.roo/skills',
+    aliases: ['roocode'],
+    legacyProjectSkillDirs: ['.roocode/skills'],
+    legacyHomeSkillDirs: ['.roocode/skills'],
+  },
+  'trae-cn': {
+    projectSkillDir: '.trae/skills',
+    homeSkillDir: '.trae-cn/skills',
+  },
+  trae: {
+    projectSkillDir: '.trae/skills',
+    homeSkillDir: '.trae/skills',
+  },
+  universal: {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.config/agents/skills',
+    aliases: ['agents'],
+    legacyHomeSkillDirs: ['.agents/skills'],
+  },
+  warp: {
+    projectSkillDir: '.agents/skills',
+    homeSkillDir: '.agents/skills',
+  },
+  windsurf: {
+    projectSkillDir: '.windsurf/skills',
+    homeSkillDir: '.codeium/windsurf/skills',
+    legacyHomeSkillDirs: ['.windsurf/skills'],
+  },
+  zencoder: {
+    projectSkillDir: '.zencoder/skills',
+    homeSkillDir: '.zencoder/skills',
+  },
 };
 
+const TOOL_ID_ALIASES = Object.freeze(
+  Object.fromEntries(
+    Object.entries(TOOL_SKILL_DESCRIPTORS).flatMap(([toolId, descriptor]) =>
+      (descriptor.aliases ?? []).map((alias) => [alias, toolId])
+    )
+  )
+);
+
+export function normalizeAgentSkillToolId(toolId: string): string {
+  const normalized = normalizeToolId(toolId);
+  return TOOL_ID_ALIASES[normalized] ?? normalized;
+}
+
 export const AGENT_SKILL_TOOL_IDS = Object.freeze(
-  Object.keys(TOOL_SKILL_ROOTS)
+  Object.keys(TOOL_SKILL_DESCRIPTORS)
 );
 
 const TOOL_BODY_SUFFIX: Partial<Record<string, string>> = {
-  factory: '\n\n$ARGUMENTS',
+  droid: '\n\n$ARGUMENTS',
 };
 
 export class AgentSkillConfigurator {
@@ -55,11 +263,11 @@ export class AgentSkillConfigurator {
   private installLocation: SkillInstallLocation = 'project';
 
   constructor(toolId: string, isAvailable = true) {
-    this.toolId = toolId;
+    this.toolId = normalizeAgentSkillToolId(toolId);
     this.isAvailable = isAvailable;
 
-    if (!TOOL_SKILL_ROOTS[this.toolId]) {
-      throw new Error(`No skill root directory configured for tool '${this.toolId}'`);
+    if (!TOOL_SKILL_DESCRIPTORS[this.toolId]) {
+      throw new Error(`No skill root directory configured for tool '${toolId}'`);
     }
   }
 
@@ -100,11 +308,16 @@ export class AgentSkillConfigurator {
     const updated: string[] = [];
 
     for (const target of this.getTargets()) {
-      const filePath = this.resolveAbsolutePath(projectPath, target.id);
-      if (await FileSystemUtils.fileExists(filePath)) {
+      const candidatePaths = this.resolveExistingAbsolutePaths(projectPath, target.id);
+
+      for (const candidate of candidatePaths) {
+        if (!await FileSystemUtils.fileExists(candidate.absolutePath)) {
+          continue;
+        }
+
         const body = this.getBody(target.id);
-        await this.updateBody(filePath, body);
-        updated.push(target.path);
+        await this.updateBody(candidate.absolutePath, body);
+        updated.push(candidate.relativePath);
       }
     }
 
@@ -119,49 +332,66 @@ export class AgentSkillConfigurator {
 
   resolveAbsolutePath(projectPath: string, id: AgentSkillId): string {
     const relativePath = this.getRelativeSkillPath(id);
+    return this.resolvePathFromRelative(projectPath, relativePath);
+  }
+
+  resolveExistingAbsolutePaths(
+    projectPath: string,
+    id: AgentSkillId
+  ): Array<{ absolutePath: string; relativePath: string }> {
+    const relativePaths = this.getAllRelativeSkillPaths(id);
+    return relativePaths.map((relativePath) => ({
+      absolutePath: this.resolvePathFromRelative(projectPath, relativePath),
+      relativePath,
+    }));
+  }
+
+  private getRelativeSkillPath(id: AgentSkillId): string {
+    const descriptor = this.getDescriptor();
+    const skillName = this.getSkillName(id);
+    const skillDir = this.installLocation === 'project'
+      ? descriptor.projectSkillDir
+      : descriptor.homeSkillDir;
+    return `${skillDir}/${skillName}/SKILL.md`;
+  }
+
+  private getAllRelativeSkillPaths(id: AgentSkillId): string[] {
+    const descriptor = this.getDescriptor();
+    const skillName = this.getSkillName(id);
+    const skillDirs = this.installLocation === 'project'
+      ? [descriptor.projectSkillDir, ...(descriptor.legacyProjectSkillDirs ?? [])]
+      : [descriptor.homeSkillDir, ...(descriptor.legacyHomeSkillDirs ?? [])];
+
+    return Array.from(new Set(skillDirs.map((dir) => `${dir}/${skillName}/SKILL.md`)));
+  }
+
+  private resolvePathFromRelative(projectPath: string, relativePath: string): string {
     if (this.installLocation === 'project') {
       return FileSystemUtils.joinPath(projectPath, relativePath);
     }
 
     const homeRoot = this.getHomeRootPath();
-    const rootPrefix = this.getToolRoot();
-    const normalizedRelativePath = FileSystemUtils.toPosixPath(relativePath);
-
-    if (!normalizedRelativePath.startsWith(`${rootPrefix}/`)) {
-      throw new Error(
-        `Skill path '${relativePath}' does not match expected root '${rootPrefix}' for ${this.toolId}`
-      );
-    }
-
-    const relativeUnderRoot = normalizedRelativePath.slice(rootPrefix.length + 1);
-    return FileSystemUtils.joinPath(homeRoot, relativeUnderRoot);
+    return FileSystemUtils.joinPath(homeRoot, relativePath);
   }
 
-  private getRelativeSkillPath(id: AgentSkillId): string {
-    const root = this.getToolRoot();
-    const skillName = this.getSkillName(id);
-    return `${root}/skills/${skillName}/SKILL.md`;
-  }
-
-  private getToolRoot(): string {
-    const root = TOOL_SKILL_ROOTS[this.toolId];
-    if (!root) {
+  private getDescriptor(): AgentSkillDescriptor {
+    const descriptor = TOOL_SKILL_DESCRIPTORS[this.toolId];
+    if (!descriptor) {
       throw new Error(`No skill root directory configured for tool '${this.toolId}'`);
     }
-    return root;
+    return descriptor;
   }
 
   private getHomeRootPath(): string {
-    if (this.toolId === 'codex') {
+    const descriptor = this.getDescriptor();
+    if (descriptor.homeBase === 'codex-home') {
       const codexHome = process.env.CODEX_HOME?.trim();
       return codexHome && codexHome.length > 0
         ? codexHome
         : FileSystemUtils.joinPath(os.homedir(), '.codex');
     }
 
-    const toolRoot = this.getToolRoot();
-    const trimmed = toolRoot.startsWith('./') ? toolRoot.slice(2) : toolRoot;
-    return path.join(os.homedir(), trimmed);
+    return os.homedir();
   }
 
   private getSkillName(id: AgentSkillId): string {
@@ -192,5 +422,4 @@ export class AgentSkillConfigurator {
 
     await FileSystemUtils.writeFile(filePath, updatedContent);
   }
-
 }

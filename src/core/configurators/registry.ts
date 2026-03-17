@@ -7,6 +7,7 @@ import { QoderConfigurator } from './qoder.js';
 import { IflowConfigurator } from './iflow.js';
 import { AgentsStandardConfigurator } from './agents.js';
 import { QwenConfigurator } from './qwen.js';
+import { normalizeToolId } from '../config.js';
 
 export class ToolRegistry {
   private static tools: Map<string, ToolConfigurator> = new Map();
@@ -21,14 +22,14 @@ export class ToolRegistry {
     const agentsConfigurator = new AgentsStandardConfigurator();
     const qwenConfigurator = new QwenConfigurator();
     // Register with the ID that matches the checkbox value
-    this.tools.set('claude', claudeConfigurator);
+    this.tools.set('claude-code', claudeConfigurator);
     this.tools.set('cline', clineConfigurator);
     this.tools.set('codebuddy', codeBuddyConfigurator);
     this.tools.set('costrict', costrictConfigurator);
     this.tools.set('qoder', qoderConfigurator);
-    this.tools.set('iflow', iflowConfigurator);
-    this.tools.set('agents', agentsConfigurator);
-    this.tools.set('qwen', qwenConfigurator);
+    this.tools.set('iflow-cli', iflowConfigurator);
+    this.tools.set('universal', agentsConfigurator);
+    this.tools.set('qwen-code', qwenConfigurator);
   }
 
   static register(tool: ToolConfigurator): void {
@@ -36,7 +37,7 @@ export class ToolRegistry {
   }
 
   static get(toolId: string): ToolConfigurator | undefined {
-    return this.tools.get(toolId);
+    return this.tools.get(normalizeToolId(toolId));
   }
 
   static getAll(): ToolConfigurator[] {

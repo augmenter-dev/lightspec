@@ -368,7 +368,7 @@ Old skill content
   });
 
   it('should refresh existing Cursor skill files', async () => {
-    const cursorPath = path.join(testDir, '.cursor/skills/lightspec-apply/SKILL.md');
+    const cursorPath = path.join(testDir, '.agents/skills/lightspec-apply/SKILL.md');
     await fs.mkdir(path.dirname(cursorPath), { recursive: true });
     const initialContent = `---
 name: /lightspec-apply
@@ -396,7 +396,7 @@ Old body
     );
     expect(logMessage).toContain('AGENTS.md (created)');
     expect(logMessage).toContain(
-      'Updated skills: .cursor/skills/lightspec-apply/SKILL.md'
+      'Updated skills: .agents/skills/lightspec-apply/SKILL.md'
     );
 
     consoleSpy.mockRestore();
@@ -479,7 +479,7 @@ Old body
   it('should refresh existing OpenCode skill files', async () => {
     const openCodePath = path.join(
       testDir,
-      '.opencode/skills/lightspec-apply/SKILL.md'
+      '.agents/skills/lightspec-apply/SKILL.md'
     );
     await fs.mkdir(path.dirname(openCodePath), { recursive: true });
     const initialContent = `---
@@ -508,7 +508,7 @@ Old body
     );
     expect(logMessage).toContain('AGENTS.md (created)');
     expect(logMessage).toContain(
-      'Updated skills: .opencode/skills/lightspec-apply/SKILL.md'
+      'Updated skills: .agents/skills/lightspec-apply/SKILL.md'
     );
 
     consoleSpy.mockRestore();
@@ -574,7 +574,7 @@ Old body
   it('should refresh existing Antigravity workflows', async () => {
     const agPath = path.join(
       testDir,
-      '.antigravity/skills/lightspec-apply/SKILL.md'
+      '.agents/skills/lightspec-apply/SKILL.md'
     );
     await fs.mkdir(path.dirname(agPath), { recursive: true });
     const initialContent = `---
@@ -598,7 +598,7 @@ Old body
 
     const [logMessage] = consoleSpy.mock.calls[0];
     expect(logMessage).toContain(
-      'Updated skills: .antigravity/skills/lightspec-apply/SKILL.md'
+      'Updated skills: .agents/skills/lightspec-apply/SKILL.md'
     );
     consoleSpy.mockRestore();
   });
@@ -662,7 +662,7 @@ Old body
   it('should refresh existing GitHub Copilot prompts', async () => {
     const ghPath = path.join(
       testDir,
-      '.github/copilot/skills/lightspec-apply/SKILL.md'
+      '.agents/skills/lightspec-apply/SKILL.md'
     );
     await fs.mkdir(path.dirname(ghPath), { recursive: true });
     const initialContent = `---
@@ -687,7 +687,7 @@ Old body
 
     const [logMessage] = consoleSpy.mock.calls[0];
     expect(logMessage).toContain(
-      'Updated skills: .github/copilot/skills/lightspec-apply/SKILL.md'
+      'Updated skills: .agents/skills/lightspec-apply/SKILL.md'
     );
 
     consoleSpy.mockRestore();
@@ -696,7 +696,7 @@ Old body
   it('should not create missing GitHub Copilot prompts on update', async () => {
     const ghApply = path.join(
       testDir,
-      '.github/copilot/skills/lightspec-apply/SKILL.md'
+      '.agents/skills/lightspec-apply/SKILL.md'
     );
 
     // Only create apply; leave proposal and archive missing
@@ -710,11 +710,11 @@ Old body
 
     const ghProposal = path.join(
       testDir,
-      '.github/copilot/skills/lightspec-proposal/SKILL.md'
+      '.agents/skills/lightspec-proposal/SKILL.md'
     );
     const ghArchive = path.join(
       testDir,
-      '.github/copilot/skills/lightspec-archive/SKILL.md'
+      '.agents/skills/lightspec-archive/SKILL.md'
     );
 
     // Confirm they weren't created by update
@@ -725,7 +725,7 @@ Old body
   it('should refresh existing Gemini CLI TOML files without creating new ones', async () => {
     const geminiProposal = path.join(
       testDir,
-      '.gemini/skills/lightspec-proposal/SKILL.md'
+      '.agents/skills/lightspec-proposal/SKILL.md'
     );
     await fs.mkdir(path.dirname(geminiProposal), { recursive: true });
     const initialContent = `description = "Scaffold a new LightSpec change and validate strictly."
@@ -752,11 +752,11 @@ Old Gemini body
 
     const geminiApply = path.join(
       testDir,
-      '.gemini/skills/lightspec-apply/SKILL.md'
+      '.agents/skills/lightspec-apply/SKILL.md'
     );
     const geminiArchive = path.join(
       testDir,
-      '.gemini/skills/lightspec-archive/SKILL.md'
+      '.agents/skills/lightspec-archive/SKILL.md'
     );
 
     await expect(FileSystemUtils.fileExists(geminiApply)).resolves.toBe(false);
@@ -764,7 +764,7 @@ Old Gemini body
 
     const [logMessage] = consoleSpy.mock.calls[0];
     expect(logMessage).toContain(
-      'Updated skills: .gemini/skills/lightspec-proposal/SKILL.md'
+      'Updated skills: .agents/skills/lightspec-proposal/SKILL.md'
     );
 
     consoleSpy.mockRestore();
@@ -956,7 +956,7 @@ Old body
   it('should refresh existing Auggie skill files', async () => {
     const auggiePath = path.join(
       testDir,
-      '.auggie/skills/lightspec-apply/SKILL.md'
+      '.augment/skills/lightspec-apply/SKILL.md'
     );
     await fs.mkdir(path.dirname(auggiePath), { recursive: true });
     const initialContent = `---
@@ -979,7 +979,7 @@ Old body
     expect(updatedContent).not.toContain('Old body');
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('.auggie/skills/lightspec-apply/SKILL.md')
+      expect.stringContaining('.augment/skills/lightspec-apply/SKILL.md')
     );
 
     consoleSpy.mockRestore();
@@ -988,7 +988,7 @@ Old body
   it('should not create missing Auggie skill files on update', async () => {
     const auggieApply = path.join(
       testDir,
-      '.auggie/skills/lightspec-apply/SKILL.md'
+      '.augment/skills/lightspec-apply/SKILL.md'
     );
 
     // Only create apply; leave proposal and archive missing
@@ -1002,11 +1002,11 @@ Old body
 
     const auggieProposal = path.join(
       testDir,
-      '.auggie/skills/lightspec-proposal/SKILL.md'
+      '.augment/skills/lightspec-proposal/SKILL.md'
     );
     const auggieArchive = path.join(
       testDir,
-      '.auggie/skills/lightspec-archive/SKILL.md'
+      '.augment/skills/lightspec-archive/SKILL.md'
     );
 
     // Confirm they weren't created by update
@@ -1255,7 +1255,7 @@ Old skill content
   it('should refresh existing RooCode skill files', async () => {
     const rooPath = path.join(
       testDir,
-      '.roocode/skills/lightspec-proposal/SKILL.md'
+      '.roo/skills/lightspec-proposal/SKILL.md'
     );
     await fs.mkdir(path.dirname(rooPath), { recursive: true });
     const initialContent = `# LightSpec: Proposal
@@ -1286,7 +1286,7 @@ Old body
     );
     expect(logMessage).toContain('AGENTS.md (created)');
     expect(logMessage).toContain(
-      'Updated skills: .roocode/skills/lightspec-proposal/SKILL.md'
+      'Updated skills: .roo/skills/lightspec-proposal/SKILL.md'
     );
 
     consoleSpy.mockRestore();
@@ -1295,7 +1295,7 @@ Old body
   it('should not create missing RooCode skill files on update', async () => {
     const rooApply = path.join(
       testDir,
-      '.roocode/skills/lightspec-apply/SKILL.md'
+      '.roo/skills/lightspec-apply/SKILL.md'
     );
 
     // Only create apply; leave proposal and archive missing
@@ -1313,11 +1313,11 @@ Old body
 
     const rooProposal = path.join(
       testDir,
-      '.roocode/skills/lightspec-proposal/SKILL.md'
+      '.roo/skills/lightspec-proposal/SKILL.md'
     );
     const rooArchive = path.join(
       testDir,
-      '.roocode/skills/lightspec-archive/SKILL.md'
+      '.roo/skills/lightspec-archive/SKILL.md'
     );
 
     // Confirm they weren't created by update
