@@ -4,6 +4,6 @@
 
 ### New Features
 
-- Expanded provider support to match the current `vercel-labs/skills` matrix, including upstream IDs such as `claude-code`, `gemini-cli`, `qwen-code`, `roo`, and `universal`.
-- Aligned project and home skill install paths with the upstream provider-specific directories, including shared `.agents` installs and provider-specific global paths.
-- Added compatibility aliases so existing LightSpec tool IDs like `claude`, `gemini`, `iflow`, `kilocode`, `roocode`, `auggie`, `factory`, and `agents` continue to work.
+- Expanded provider coverage around the current `vercel-labs/skills` ecosystem, including upstream IDs such as `claude-code`, `qwen-code`, `roo`, and `universal`.
+- Simplified the shared `.agents` experience into a single `Universal agent skills` option, which is shown first and selected by default during interactive init.
+- Added compatibility aliases so existing LightSpec tool IDs and shared-agent aliases such as `claude`, `codex`, `cursor`, `gemini`, `github-copilot`, `opencode`, `replit`, `auggie`, `factory`, and `agents` continue to work.
