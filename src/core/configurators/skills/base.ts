@@ -33,16 +33,6 @@ const TOOL_SKILL_DESCRIPTORS: Record<string, AgentSkillDescriptor> = {
     projectSkillDir: '.adal/skills',
     homeSkillDir: '.adal/skills',
   },
-  amp: {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: '.config/agents/skills',
-  },
-  antigravity: {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: '.gemini/antigravity/skills',
-    legacyProjectSkillDirs: ['.antigravity/skills'],
-    legacyHomeSkillDirs: ['.antigravity/skills'],
-  },
   augment: {
     projectSkillDir: '.augment/skills',
     homeSkillDir: '.augment/skills',
@@ -86,41 +76,10 @@ const TOOL_SKILL_DESCRIPTORS: Record<string, AgentSkillDescriptor> = {
     homeSkillDir: '.config/crush/skills',
     legacyHomeSkillDirs: ['.crush/skills'],
   },
-  cursor: {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: '.cursor/skills',
-    legacyProjectSkillDirs: ['.cursor/skills'],
-  },
-  codex: {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: 'skills',
-    homeBase: 'codex-home',
-    legacyProjectSkillDirs: ['.codex/skills'],
-  },
-  deepagents: {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: '.deepagents/agent/skills',
-  },
   droid: {
     projectSkillDir: '.factory/skills',
     homeSkillDir: '.factory/skills',
     aliases: ['factory'],
-  },
-  'gemini-cli': {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: '.gemini/skills',
-    aliases: ['gemini'],
-    legacyProjectSkillDirs: ['.gemini/skills'],
-  },
-  'github-copilot': {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: '.copilot/skills',
-    legacyProjectSkillDirs: ['.github/copilot/skills'],
-    legacyHomeSkillDirs: ['.github/copilot/skills'],
-  },
-  goose: {
-    projectSkillDir: '.goose/skills',
-    homeSkillDir: '.config/goose/skills',
   },
   'iflow-cli': {
     projectSkillDir: '.iflow/skills',
@@ -135,10 +94,6 @@ const TOOL_SKILL_DESCRIPTORS: Record<string, AgentSkillDescriptor> = {
     projectSkillDir: '.kilocode/skills',
     homeSkillDir: '.kilocode/skills',
     aliases: ['kilocode'],
-  },
-  'kimi-cli': {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: '.config/agents/skills',
   },
   'kiro-cli': {
     projectSkillDir: '.kiro/skills',
@@ -168,12 +123,6 @@ const TOOL_SKILL_DESCRIPTORS: Record<string, AgentSkillDescriptor> = {
     projectSkillDir: 'skills',
     homeSkillDir: '.openclaw/skills',
   },
-  opencode: {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: '.config/opencode/skills',
-    legacyProjectSkillDirs: ['.opencode/skills'],
-    legacyHomeSkillDirs: ['.opencode/skills'],
-  },
   openhands: {
     projectSkillDir: '.openhands/skills',
     homeSkillDir: '.openhands/skills',
@@ -195,10 +144,6 @@ const TOOL_SKILL_DESCRIPTORS: Record<string, AgentSkillDescriptor> = {
     homeSkillDir: '.qwen/skills',
     aliases: ['qwen'],
   },
-  replit: {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: '.config/agents/skills',
-  },
   roo: {
     projectSkillDir: '.roo/skills',
     homeSkillDir: '.roo/skills',
@@ -217,12 +162,41 @@ const TOOL_SKILL_DESCRIPTORS: Record<string, AgentSkillDescriptor> = {
   universal: {
     projectSkillDir: '.agents/skills',
     homeSkillDir: '.config/agents/skills',
-    aliases: ['agents'],
-    legacyHomeSkillDirs: ['.agents/skills'],
-  },
-  warp: {
-    projectSkillDir: '.agents/skills',
-    homeSkillDir: '.agents/skills',
+    aliases: [
+      'agents',
+      'amp',
+      'antigravity',
+      'codex',
+      'cursor',
+      'deepagents',
+      'gemini',
+      'gemini-cli',
+      'github-copilot',
+      'goose',
+      'kimi-cli',
+      'opencode',
+      'replit',
+      'warp',
+    ],
+    legacyProjectSkillDirs: [
+      '.antigravity/skills',
+      '.cursor/skills',
+      '.codex/skills',
+      '.gemini/skills',
+      '.github/copilot/skills',
+      '.opencode/skills',
+    ],
+    legacyHomeSkillDirs: [
+      '.agents/skills',
+      '.antigravity/skills',
+      '.cursor/skills',
+      '.codex/skills',
+      '.deepagents/agent/skills',
+      '.gemini/skills',
+      '.github/copilot/skills',
+      '.copilot/skills',
+      '.opencode/skills',
+    ],
   },
   windsurf: {
     projectSkillDir: '.windsurf/skills',

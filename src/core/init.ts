@@ -102,9 +102,6 @@ type RootStubStatus = 'created' | 'updated' | 'skipped';
 
 const ROOT_STUB_CHOICE_VALUE = '__root_stub__';
 
-const OTHER_TOOLS_HEADING_VALUE = '__heading-other__';
-const LIST_SPACER_VALUE = '__list-spacer__';
-
 const toolSelectionWizard = createPrompt<string[], ToolWizardConfig>(
   (config, done) => {
     const totalSteps = 3;
@@ -631,7 +628,7 @@ export class InitCommand {
       ? availableTools
           .filter((tool) => existingTools[tool.value])
           .map((tool) => tool.value)
-      : [];
+      : ['universal'];
 
     const initialSelected = Array.from(new Set(initialNativeSelection));
 
@@ -652,35 +649,6 @@ export class InitCommand {
         configured: Boolean(existingTools[tool.value]),
         selectable: true,
       })),
-      ...(availableTools.length
-        ? ([
-            {
-              kind: 'info' as const,
-              value: LIST_SPACER_VALUE,
-              label: { primary: '' },
-              selectable: false,
-            },
-          ] as ToolWizardChoice[])
-        : []),
-      {
-        kind: 'heading',
-        value: OTHER_TOOLS_HEADING_VALUE,
-        label: {
-          primary:
-            'Other tools (use Universal AGENTS.md for Amp, VS Code, GitHub Copilot, …)',
-        },
-        selectable: false,
-      },
-      {
-        kind: 'option',
-        value: ROOT_STUB_CHOICE_VALUE,
-        label: {
-          primary: 'Universal AGENTS.md',
-          annotation: 'always available',
-        },
-        configured: extendMode,
-        selectable: true,
-      },
     ];
 
     return this.prompt({

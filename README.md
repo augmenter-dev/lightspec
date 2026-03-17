@@ -83,9 +83,7 @@ See the full comparison in [How LightSpec Compares](#how-lightspec-compares).
 ### Supported AI Tools
 
 - AdaL
-- Amp
 - Amazon Q Developer
-- Antigravity
 - Augment
 - Claude Code
 - Cline
@@ -95,17 +93,10 @@ See the full comparison in [How LightSpec Compares](#how-lightspec-compares).
 - CoStrict
 - Cortex Code
 - Crush
-- Cursor
-- Codex
-- Deep Agents
 - Droid
-- Gemini CLI
-- GitHub Copilot
-- Goose
 - iFlow CLI
 - Junie
 - Kilo Code
-- Kimi Code CLI
 - Kiro CLI
 - Kode
 - MCPJam
@@ -113,18 +104,15 @@ See the full comparison in [How LightSpec Compares](#how-lightspec-compares).
 - Mux
 - Neovate
 - OpenClaw
-- OpenCode
 - OpenHands
 - Pochi
 - Pi
 - Qoder
 - Qwen Code
-- Replit
 - Roo Code
 - Trae
 - Trae CN
-- Universal (`.agents`)
-- Warp
+- Universal agent skills (`.agents`, for Codex, Amp, VS Code, Zed, Warp, Goose, Cursor, Gemini CLI, GitHub Copilot, OpenCode, Replit, and similar assistants)
 - Windsurf
 - Zencoder
 - Any AGENTS.md-compatible assistant (via Universal `AGENTS.md`)
@@ -193,7 +181,7 @@ lightspec init
 ```
 
 **What happens during initialization:**
-- You'll be prompted to pick any natively supported AI tools using the current Vercel-style provider IDs and install paths (for example `claude-code`, `codex`, `cursor`, `gemini-cli`, `opencode`, `qwen-code`, `roo`, `universal`)
+- You'll be prompted to pick any natively supported AI tools using the current LightSpec provider IDs and install paths (for example `claude-code`, `cline`, `costrict`, `qoder`, `qwen-code`, `roo`, `universal`)
 - LightSpec automatically configures skills for the tools you choose and always writes a managed `AGENTS.md` hand-off at the project root
 - A new `lightspec/` directory structure is created in your project
 

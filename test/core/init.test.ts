@@ -992,21 +992,27 @@ describe('InitCommand', () => {
       expect(await fileExists(claudePath)).toBe(true);
     });
 
-    it('should show a single .agents option with first five providers and ellipsis', async () => {
+    it('should show Universal AGENTS first, selected by default, with the shared provider details', async () => {
       queueSelections('universal', DONE);
 
       await initCommand.execute(testDir);
 
       const firstCallArgs = mockPrompt.mock.calls[0][0];
+      const firstSelectableChoice = firstCallArgs.choices.find(
+        (choice: any) => choice.selectable
+      );
       const agentsChoice = firstCallArgs.choices.find(
         (choice: any) => choice.value === 'universal'
       );
+      const initialSelected = firstCallArgs.initialSelected ?? [];
 
+      expect(firstSelectableChoice?.value).toBe('universal');
       expect(agentsChoice).toBeDefined();
-      expect(agentsChoice.label.primary).toBe('AGENTS.md + .agents');
+      expect(agentsChoice.label.primary).toBe('Universal agent skills');
       expect(agentsChoice.label.annotation).toBe(
-        'Amp, VS Code, Zed, Warp, Aider, ...'
+        'Codex, Amp, VS Code, Zed, Warp, ...'
       );
+      expect(initialSelected).toContain('universal');
     });
 
     it('should mark existing tools as already configured during extend mode', async () => {
@@ -1055,28 +1061,28 @@ describe('InitCommand', () => {
       expect(wsChoice.configured).toBe(true);
     });
 
-    it('should mark Antigravity as already configured during extend mode', async () => {
+    it('should mark Universal AGENTS as already configured when Antigravity alias is used in extend mode', async () => {
       queueSelections('antigravity', DONE, 'antigravity', DONE);
       await initCommand.execute(testDir);
       await initCommand.execute(testDir);
 
       const secondRunArgs = mockPrompt.mock.calls[1][0];
-      const antigravityChoice = secondRunArgs.choices.find(
-        (choice: any) => choice.value === 'antigravity'
+      const universalChoice = secondRunArgs.choices.find(
+        (choice: any) => choice.value === 'universal'
       );
-      expect(antigravityChoice.configured).toBe(true);
+      expect(universalChoice.configured).toBe(true);
     });
 
-    it('should mark Codex as already configured during extend mode', async () => {
+    it('should mark Universal AGENTS as already configured when Codex alias is used in extend mode', async () => {
       queueSelections('codex', DONE, 'codex', DONE);
       await initCommand.execute(testDir);
       await initCommand.execute(testDir);
 
       const secondRunArgs = mockPrompt.mock.calls[1][0];
-      const codexChoice = secondRunArgs.choices.find(
-        (choice: any) => choice.value === 'codex'
+      const universalChoice = secondRunArgs.choices.find(
+        (choice: any) => choice.value === 'universal'
       );
-      expect(codexChoice.configured).toBe(true);
+      expect(universalChoice.configured).toBe(true);
     });
 
     it('should mark Mistral Vibe as already configured during extend mode', async () => {
@@ -1103,16 +1109,16 @@ describe('InitCommand', () => {
       expect(factoryChoice.configured).toBe(true);
     });
 
-    it('should mark GitHub Copilot as already configured during extend mode', async () => {
+    it('should mark Universal AGENTS as already configured when GitHub Copilot alias is used in extend mode', async () => {
       queueSelections('github-copilot', DONE, 'github-copilot', DONE);
       await initCommand.execute(testDir);
       await initCommand.execute(testDir);
 
       const secondRunArgs = mockPrompt.mock.calls[1][0];
-      const githubCopilotChoice = secondRunArgs.choices.find(
-        (choice: any) => choice.value === 'github-copilot'
+      const universalChoice = secondRunArgs.choices.find(
+        (choice: any) => choice.value === 'universal'
       );
-      expect(githubCopilotChoice.configured).toBe(true);
+      expect(universalChoice.configured).toBe(true);
     });
 
     it('should create Amazon Q Developer prompt files with templates', async () => {
@@ -1779,7 +1785,7 @@ describe('InitCommand', () => {
       expect(claudeChoice.configured).toBe(true);
     });
 
-    it('should NOT show already configured for Codex in fresh init even with global skills', async () => {
+    it('should NOT show Universal AGENTS as already configured in fresh init even with legacy Codex global skills', async () => {
       // Create global Codex skills (simulating previous installation)
       const codexSkillsDir = path.join(testDir, '.codex/skills');
       await fs.mkdir(codexSkillsDir, { recursive: true });
@@ -1796,12 +1802,12 @@ describe('InitCommand', () => {
       await initCommand.execute(testDir);
 
       const firstCallArgs = mockPrompt.mock.calls[0][0];
-      const codexChoice = firstCallArgs.choices.find(
-        (choice: any) => choice.value === 'codex'
+      const universalChoice = firstCallArgs.choices.find(
+        (choice: any) => choice.value === 'universal'
       );
 
       // In fresh init, even global tools should not show as configured
-      expect(codexChoice.configured).toBe(false);
+      expect(universalChoice.configured).toBe(false);
     });
   });
 

@@ -153,24 +153,25 @@ describe('lightspec CLI e2e basics', () => {
       expect(result.stderr).toContain('Cannot combine reserved values "all" or "none" with specific tool IDs');
     });
 
-    it('initializes skills in home location when --skills-location home is used', async () => {
+    it('initializes universal skills in shared home location when --skills-location home is used', async () => {
       const projectDir = await prepareFixture('tmp-init');
       const emptyProjectDir = path.join(projectDir, '..', 'empty-project');
       await fs.mkdir(emptyProjectDir, { recursive: true });
 
-      const codexHome = path.join(emptyProjectDir, '.codex-home');
+      const fakeHome = path.join(emptyProjectDir, 'fake-home');
+      await fs.mkdir(fakeHome, { recursive: true });
       const result = await runCLI(
-        ['init', '--tools', 'codex', '--skills-location', 'home'],
+        ['init', '--tools', 'universal', '--skills-location', 'home'],
         {
           cwd: emptyProjectDir,
-          env: { CODEX_HOME: codexHome },
+          env: { HOME: fakeHome },
         }
       );
       expect(result.exitCode).toBe(0);
 
       const globalSkill = path.join(
-        codexHome,
-        'skills/lightspec-proposal/SKILL.md'
+        fakeHome,
+        '.config/agents/skills/lightspec-proposal/SKILL.md'
       );
       const projectSkill = path.join(
         emptyProjectDir,
