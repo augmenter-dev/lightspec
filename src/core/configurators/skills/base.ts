@@ -22,7 +22,7 @@ interface AgentSkillDescriptor {
   legacyHomeSkillDirs?: string[];
 }
 
-const ALL_SKILL_IDS: AgentSkillId[] = ['proposal', 'apply', 'archive', 'agentsmd-check'];
+const ALL_SKILL_IDS: AgentSkillId[] = ['proposal', 'apply', 'archive', 'agentsmd-check', 'loop'];
 
 const TOOL_SKILL_DESCRIPTORS: Record<string, AgentSkillDescriptor> = {
   'amazon-q': {
