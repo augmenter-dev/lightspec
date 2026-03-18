@@ -10,9 +10,6 @@ metadata:
 
 Follow these step closely.
 
-1. create a branch named releases/release-start-YYYY-MM-DD
-2. run `pnpm changeset`
-3. open a PR (using gh)
-4. approve the PR (using gh if needed)
-5. wait for the CI to create the build
-6. run `pnpm run release:manual`
+1. run `pnpm changeset`
+2. run `./scripts/release-manual.sh`
+3. run `npm publish`
