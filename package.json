@@ -1,6 +1,6 @@
 {
   "name": "lightspec",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "AI-native system for spec-driven development",
   "keywords": [
     "lightspec",
@@ -53,7 +53,7 @@
     "check:pack-version": "node scripts/pack-version-check.mjs",
     "release": "pnpm run release:ci",
     "release:ci": "pnpm run check:pack-version && pnpm exec changeset publish",
-    "release:passkey": "npm config set auth-type web && pnpm run release:ci",
+    "release:passkey": "pnpm run check:pack-version && npm publish --access public",
     "release:manual": "bash scripts/release-manual.sh",
     "changeset": "changeset"
   },
