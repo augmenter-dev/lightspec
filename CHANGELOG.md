@@ -1,5 +1,14 @@
 # lightspec
 
+## 0.6.0
+
+### Minor Changes
+
+- ### New Features
+
+  - Added a new built-in `lightspec-loop` skill template and included it in default skill generation during `lightspec init`.
+  - Skill-enabled providers now install `lightspec-loop` alongside the existing LightSpec workflow skills.
+
 ## 0.4.1
 
 ### Patch Changes
